@@ -36,7 +36,7 @@ class WebhookController extends App
         $token = Bots::find(['id' => $botId])->rows[0]->api;
         $telegram = new Api($token);
         //print_r($telegram->setWebhook(['url'=>'https://coffe.ebot.biz/webhook']));
-       //$telegram->removeWebhook();
+        //$telegram->removeWebhook();
         
         $message = $telegram->getWebhookUpdate();
         $chatId = $message->getMessage()->getChat()->getId();
@@ -46,13 +46,13 @@ class WebhookController extends App
         ]));
         
         
-       // $message = $telegram->getUpdates();
-        if($message->getMessage()->getReplyToMessage()->getFrom()->getUsername()=='CoffeeBreak_bot'){
-                     print_r($telegram->sendMessage([
-                         'chat_id' => $chatId,
-                         'text' => "Ok"
-                     ]));
-        }else {
+        // $message = $telegram->getUpdates();
+        if ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' && $message->getMessage()->getText() != "\/start@CoffeeBreak_bot") {
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Ok"
+            ]));
+        } else {
             $keyboard = [];
             $i = 0;
             $i2 = 0;
@@ -70,14 +70,14 @@ class WebhookController extends App
                 $i++;
                 $keyboard[$i2][] = $row;
             }
-    
+            
             $reply_markup = $telegram->replyKeyboardMarkup([
                 'keyboard' => $keyboard,
                 'resize_keyboard' => true,
                 'one_time_keyboard' => true,
                 //'selective' => true
             ]);
-    
+            
             $response = $telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => 'Set coffee:',
@@ -111,19 +111,19 @@ class WebhookController extends App
         //     }
         
     }
-//
-//
-//    public function hideKey($replayTo)
-//    {
-//        $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
-//        $telegram = new Api($API_KEY);
-//        $response = $telegram->sendMessage([
-//            'chat_id' => $this->chatId . '@',
-//            'text' => 'Ok.',
-//            'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
-//            'reply_to_message_id' => $replayTo
-//        ]);
-//    }
+    //
+    //
+    //    public function hideKey($replayTo)
+    //    {
+    //        $API_KEY = '296504384:AAEFESDASMwjNmneHcDmanAF9nNBO0GA44g';
+    //        $telegram = new Api($API_KEY);
+    //        $response = $telegram->sendMessage([
+    //            'chat_id' => $this->chatId . '@',
+    //            'text' => 'Ok.',
+    //            'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
+    //            'reply_to_message_id' => $replayTo
+    //        ]);
+    //    }
     
     public function post()
     {
