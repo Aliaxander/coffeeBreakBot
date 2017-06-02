@@ -56,7 +56,7 @@ class WebhookController extends App
                 $result = '';
                 $people = [];
                 foreach ($find->rows as $row) {
-                    $result .= " ```" . $row->name . "``` - " . $row->type . "\n";
+                    $result .= " <b>" . $row->name . "</b> - " . $row->type . "\n";
                     $people[] = $row->name;
                 }
                 
