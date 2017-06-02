@@ -52,6 +52,12 @@ class WebhookController extends App
         if ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' &&
             $message->getMessage()->getText() != '/start@CoffeeBreak_bot'
         ) {
+            
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Ok"
+            ]));
+            
             $name = $message->getMessage()->getFrom()->getFirstName() . ' ' . $message->getMessage()->getFrom()->getLastName();
             $find = CoffeeUsers::find(['name' => $name]);
             if ($find->count > 0) {
