@@ -51,6 +51,8 @@ class WebhookController extends App
         // $message = $telegram->getUpdates();
         if ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' &&
             $message->getMessage()->getText() != '/start@CoffeeBreak_bot'
+            &&
+            $message->getMessage()->getText() != '/result@CoffeeBreak_bot'
         ) {
             
             print_r($telegram->sendMessage([
