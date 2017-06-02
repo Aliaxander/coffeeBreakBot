@@ -63,19 +63,19 @@ class WebhookController extends App
             $keyboard[$i2][] = $row;
         }
     
-//        $reply_markup = $telegram->replyKeyboardMarkup([
-//            'keyboard' => $keyboard,
-//            'resize_keyboard' => true,
-//            'one_time_keyboard' => true,
-//            'selective' => true
-//        ]);
-//
-//        $response = $telegram->sendMessage([
-//            'chat_id' => $chatId.'@',
-//            'text' => 'Set coffee:',
-//            'reply_markup' => $reply_markup,
-//            'reply_to_message_id' => $message->getMessage()->getFrom()->getId()
-//        ]);
+        $reply_markup = $telegram->replyKeyboardMarkup([
+            'keyboard' => $keyboard,
+            'resize_keyboard' => true,
+            'one_time_keyboard' => true,
+            'selective' => true
+        ]);
+
+        $response = $telegram->sendMessage([
+            'chat_id' => $chatId.'@',
+            'text' => 'Set coffee:',
+            'reply_markup' => $reply_markup,
+            'reply_to_message_id' => $message->getMessage()->getFrom()->getId()
+        ]);
         
         //
         //        $text = $message->getMessage()->getText();
