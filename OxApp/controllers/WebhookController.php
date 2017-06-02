@@ -40,7 +40,7 @@ class WebhookController extends App
         
         $message = $telegram->getWebhookUpdate();
        // $message = $telegram->getUpdates();
-        $chatId = $message->getMessage()->getFrom()->getId();
+        $chatId = $message->getMessage()->getChat()->getId();
         
         $keyboard=[];
         $i=0;
