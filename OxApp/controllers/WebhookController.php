@@ -49,10 +49,28 @@ class WebhookController extends App
         
         
         // $message = $telegram->getUpdates();
-        if ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' &&
+        
+        if ($message->getMessage()->getText() == '/result@CoffeeBreak_bot') {
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => "Ok"
+            ]));
+            $find = CoffeeUsers::find();
+            if ($find->count > 0) {
+                $result = '';
+                $people = [];
+                foreach ($find->rows as $row) {
+                    $result .= " " . $row->name . " - " . $row->type . "\n";
+                    $people[] = $row->name;
+                }
+                
+                print_r($telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'text' => $people[mt_rand(0, count($people) - 1)] . " buy coffee:\n" . $result
+                ]));
+            }
+        } elseif ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' &&
             $message->getMessage()->getText() != '/start@CoffeeBreak_bot'
-            &&
-            $message->getMessage()->getText() != '/result@CoffeeBreak_bot'
         ) {
             
             print_r($telegram->sendMessage([
@@ -76,25 +94,6 @@ class WebhookController extends App
                 ]));
             }
             
-        } elseif ($message->getMessage()->getText() == '/result@CoffeeBreak_bot') {
-            print_r($telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => "Ok"
-            ]));
-            $find = CoffeeUsers::find();
-            if ($find->count > 0) {
-                $result = '';
-                $people = [];
-                foreach ($find->rows as $row) {
-                    $result .= " " . $row->name . " - " . $row->type . "\n";
-                    $people[] = $row->name;
-                }
-                
-                print_r($telegram->sendMessage([
-                    'chat_id' => $chatId,
-                    'text' => $people[mt_rand(0, count($people) - 1)] . " buy coffee:\n" . $result
-                ]));
-            }
         } else {
             $keyboard = [];
             $i = 0;
