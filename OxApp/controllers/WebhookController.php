@@ -51,27 +51,30 @@ class WebhookController extends App
         // $message = $telegram->getUpdates();
         
         if ($message->getMessage()->getText() == '/result@CoffeeBreak_bot') {
-            $find = CoffeeUsers::find(['chatId'=> $chatId]);
+            $find = CoffeeUsers::find(['chatId' => $chatId]);
             if ($find->count > 0) {
                 $result = '';
                 $people = [];
                 foreach ($find->rows as $row) {
-                    $result .= " <b>" . $row->name . "</b> - " . $row->type . "\n";
-                    $people[] = $row->name;
+                    if ($row->type != 'No, thanks') {
+                        $result .= " <b>" . $row->name . "</b> - " . $row->type . "\n";
+                        $people[] = $row->name;
+                    }
                 }
                 
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
                     'text' => $people[mt_rand(0, count($people) - 1)] . " покупает:\n" . $result,
+                    'parse_mode' => 'HTML',
                     'reply_markup' => $telegram->replyKeyboardHide(),
                 ]));
             }
-//            $response = $telegram->sendMessage([
-//                'chat_id' => $chatId. '@',
-//                'text' => 'Ok.',
-//                'reply_markup' => $telegram->replyKeyboardHide(),
-//                'reply_to_message_id' => $chatId
-//            ]);
+            //            $response = $telegram->sendMessage([
+            //                'chat_id' => $chatId. '@',
+            //                'text' => 'Ok.',
+            //                'reply_markup' => $telegram->replyKeyboardHide(),
+            //                'reply_to_message_id' => $chatId
+            //            ]);
             CoffeeUsers::delete(['chatId' => $chatId]);
         } elseif ($message->getMessage()->getText() == '/start@CoffeeBreak_bot') {
             
