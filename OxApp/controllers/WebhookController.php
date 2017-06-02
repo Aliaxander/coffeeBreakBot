@@ -17,8 +17,10 @@ namespace OxApp\controllers;
 use Ox\App;
 use OxApp\helpers\Config;
 use OxApp\models\Bots;
+use OxApp\models\CoffeeUsers;
 use OxApp\models\Requests;
 use OxApp\models\Users;
+use function Sodium\add;
 use Telegram\Bot\Api;
 
 /**
@@ -42,16 +44,21 @@ class WebhookController extends App
         $chatId = $message->getMessage()->getChat()->getId();
         print_r($telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => json_encode($message->getMessage()). $message->getMessage()->getText()
+            'text' => json_encode($message->getMessage()) . $message->getMessage()->getText()
         ]));
         
         
         // $message = $telegram->getUpdates();
-        if ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' && $message->getMessage()->getText() != "/start@CoffeeBreak_bot") {
-            print_r($telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => "Ok"
-            ]));
+        if ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' &&
+            $message->getMessage()->getText() != '/start@CoffeeBreak_bot'
+        ) {
+            $name = $message->getMessage()->getFrom()->getFirstName() . ' ' . $message->getMessage()->getFrom()->getLastName();
+            $find = CoffeeUsers::find(['name' => $name]);
+            if ($find->count > 0) {
+                CoffeeUsers::where(['id' => $find->rows[0]->id])->update(['type' => $message->getMessage()->getText()]);
+            } else {
+                CoffeeUsers::add(['name' => $name, 'type' => $message->getMessage()->getText()]);
+            }
         } else {
             $keyboard = [];
             $i = 0;
