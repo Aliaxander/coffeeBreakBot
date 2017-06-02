@@ -62,7 +62,7 @@ class WebhookController extends App
                 
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
-                    'text' => $people[mt_rand(0, count($people) - 1)] . " buy coffee:\n" . $result,
+                    'text' => $people[mt_rand(0, count($people) - 1)] . " покупает:\n" . $result,
                     'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
                 ]));
             }
@@ -96,7 +96,7 @@ class WebhookController extends App
             
             $response = $telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => 'Set coffee:',
+                'text' => 'Выбери напиток:',
                 'reply_markup' => $reply_markup,
                 //'reply_to_message_id' => $chatId
             ]);
