@@ -66,7 +66,7 @@ class WebhookController extends App
                     'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
                 ]));
             }
-            
+            CoffeeUsers::delete([]);
         } elseif ($message->getMessage()->getText() == '/start@CoffeeBreak_bot') {
             
             $keyboard = [];
