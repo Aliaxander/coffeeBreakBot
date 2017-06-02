@@ -41,7 +41,10 @@ class WebhookController extends App
         $message = $telegram->getWebhookUpdate();
        // $message = $telegram->getUpdates();
         $chatId = $message->getMessage()->getChat()->getId();
-        
+                 print_r($telegram->sendMessage([
+                     'chat_id' => $chatId,
+                     'text' => json_encode($message->getMessage())
+                 ]));
         $keyboard=[];
         $i=0;
         $i2=0;
@@ -60,19 +63,19 @@ class WebhookController extends App
             $keyboard[$i2][] = $row;
         }
     
-        $reply_markup = $telegram->replyKeyboardMarkup([
-            'keyboard' => $keyboard,
-            'resize_keyboard' => true,
-            'one_time_keyboard' => true,
-            'selective' => true
-        ]);
-    
-        $response = $telegram->sendMessage([
-            'chat_id' => $chatId.'@',
-            'text' => 'Set coffee:',
-            'reply_markup' => $reply_markup,
-            'reply_to_message_id' => $message->getMessage()->getFrom()->getId()
-        ]);
+//        $reply_markup = $telegram->replyKeyboardMarkup([
+//            'keyboard' => $keyboard,
+//            'resize_keyboard' => true,
+//            'one_time_keyboard' => true,
+//            'selective' => true
+//        ]);
+//
+//        $response = $telegram->sendMessage([
+//            'chat_id' => $chatId.'@',
+//            'text' => 'Set coffee:',
+//            'reply_markup' => $reply_markup,
+//            'reply_to_message_id' => $message->getMessage()->getFrom()->getId()
+//        ]);
         
         //
         //        $text = $message->getMessage()->getText();
