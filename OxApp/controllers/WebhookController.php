@@ -42,14 +42,14 @@ class WebhookController extends App
         
         $message = $telegram->getWebhookUpdate();
         $chatId = $message->getMessage()->getChat()->getId();
-//        print_r($telegram->sendMessage([
-//            'chat_id' => $chatId,
-//            'text' => json_encode($message->getMessage()) . $message->getMessage()->getText()
-//        ]));
+        //        print_r($telegram->sendMessage([
+        //            'chat_id' => $chatId,
+        //            'text' => json_encode($message->getMessage()) . $message->getMessage()->getText()
+        //        ]));
         
         
         // $message = $telegram->getUpdates();
-    
+        
         if ($message->getMessage()->getText() == '/result@CoffeeBreak_bot') {
             $find = CoffeeUsers::find();
             if ($find->count > 0) {
@@ -59,16 +59,16 @@ class WebhookController extends App
                     $result .= " " . $row->name . " - " . $row->type . "\n";
                     $people[] = $row->name;
                 }
-            
+                
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
                     'text' => $people[mt_rand(0, count($people) - 1)] . " buy coffee:\n" . $result,
                     'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
                 ]));
             }
-        
+            
         } elseif ($message->getMessage()->getText() == '/start@CoffeeBreak_bot') {
-    
+            
             $keyboard = [];
             $i = 0;
             $i2 = 0;
@@ -86,43 +86,44 @@ class WebhookController extends App
                 $i++;
                 $keyboard[$i2][] = $row;
             }
-    
+            
             $reply_markup = $telegram->replyKeyboardMarkup([
                 'keyboard' => $keyboard,
                 'resize_keyboard' => true,
                 'one_time_keyboard' => true,
                 //'selective' => true
             ]);
-    
+            
             $response = $telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => 'Set coffee:',
                 'reply_markup' => $reply_markup,
                 //'reply_to_message_id' => $chatId
             ]);
-        
+            
         } elseif ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' &&
-            $message->getMessage()->getText() != '/start@CoffeeBreak_bot'
+            $message->getMessage()->getText() != '/start@CoffeeBreak_bot' &&
+            $message->getMessage()->getText() != '/result@CoffeeBreak_bot'
         ) {
-
+            
             $name = $message->getMessage()->getFrom()->getFirstName() . ' ' . $message->getMessage()->getFrom()->getLastName();
             $find = CoffeeUsers::find(['name' => $name]);
             if ($find->count > 0) {
                 CoffeeUsers::where(['id' => $find->rows[0]->id])->update(['type' => $message->getMessage()->getText()]);
-//                print_r($telegram->sendMessage([
-//                    'chat_id' => $chatId,
-//                    'text' => "Update"
-//                ]));
+                //                print_r($telegram->sendMessage([
+                //                    'chat_id' => $chatId,
+                //                    'text' => "Update"
+                //                ]));
             } else {
                 CoffeeUsers::add(['name' => $name, 'type' => $message->getMessage()->getText()]);
-//                print_r($telegram->sendMessage([
-//                    'chat_id' => $chatId,
-//                    'text' => "Add"
-//                ]));
+                //                print_r($telegram->sendMessage([
+                //                    'chat_id' => $chatId,
+                //                    'text' => "Add"
+                //                ]));
             }
             
         }
-
+        
         
     }
     
