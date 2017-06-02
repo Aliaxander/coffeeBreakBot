@@ -39,44 +39,50 @@ class WebhookController extends App
        //$telegram->removeWebhook();
         
         $message = $telegram->getWebhookUpdate();
-       // $message = $telegram->getUpdates();
         $chatId = $message->getMessage()->getChat()->getId();
-                 print_r($telegram->sendMessage([
-                     'chat_id' => $chatId,
-                     'text' => json_encode($message->getMessage())
-                 ]));
-        $keyboard=[];
-        $i=0;
-        $i2=0;
-        $menu[] = 'Latte';
-        $menu[] = 'Cappuccino';
-        $menu[] = 'Espresso';
-        $menu[] = 'Americano';
-        $menu[] = 'Tea';
-        $menu[] = 'No, thanks';
-        foreach ($menu as $row) {
-            if ($i > 2) {
-                $i = 0;
-                $i2++;
+       // $message = $telegram->getUpdates();
+        if($message->getMessage()->getReplyToMessage()->getFrom()->getUsername()=='CoffeeBreak_bot'){
+                     print_r($telegram->sendMessage([
+                         'chat_id' => $chatId,
+                         'text' => "Ok"
+                     ]));
+        }else {
+            print_r($telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => json_encode($message->getMessage())
+            ]));
+            $keyboard = [];
+            $i = 0;
+            $i2 = 0;
+            $menu[] = 'Latte';
+            $menu[] = 'Cappuccino';
+            $menu[] = 'Espresso';
+            $menu[] = 'Americano';
+            $menu[] = 'Tea';
+            $menu[] = 'No, thanks';
+            foreach ($menu as $row) {
+                if ($i > 2) {
+                    $i = 0;
+                    $i2++;
+                }
+                $i++;
+                $keyboard[$i2][] = $row;
             }
-            $i++;
-            $keyboard[$i2][] = $row;
+    
+            $reply_markup = $telegram->replyKeyboardMarkup([
+                'keyboard' => $keyboard,
+                'resize_keyboard' => true,
+                'one_time_keyboard' => true,
+                //'selective' => true
+            ]);
+    
+            $response = $telegram->sendMessage([
+                'chat_id' => $chatId,
+                'text' => 'Set coffee:',
+                'reply_markup' => $reply_markup,
+                //'reply_to_message_id' => $chatId
+            ]);
         }
-        
-        $reply_markup = $telegram->replyKeyboardMarkup([
-            'keyboard' => $keyboard,
-            'resize_keyboard' => true,
-            'one_time_keyboard' => true,
-            //'selective' => true
-        ]);
-
-        $response = $telegram->sendMessage([
-            'chat_id' => $chatId,
-            'text' => 'Set coffee:',
-            'reply_markup' => $reply_markup,
-            //'reply_to_message_id' => $chatId
-        ]);
-        
         //
         //        $text = $message->getMessage()->getText();
         //     $userData = $message->getMessage()->getFrom();
