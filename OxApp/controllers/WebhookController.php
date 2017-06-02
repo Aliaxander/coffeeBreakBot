@@ -51,7 +51,7 @@ class WebhookController extends App
         // $message = $telegram->getUpdates();
         
         if ($message->getMessage()->getText() == '/result@CoffeeBreak_bot') {
-            $find = CoffeeUsers::find();
+            $find = CoffeeUsers::find(['chatId'=> $chatId]);
             if ($find->count > 0) {
                 $result = '';
                 $people = [];
@@ -72,7 +72,7 @@ class WebhookController extends App
 //                'reply_markup' => $telegram->replyKeyboardHide(),
 //                'reply_to_message_id' => $chatId
 //            ]);
-            CoffeeUsers::delete([]);
+            CoffeeUsers::delete(['chatId' => $chatId]);
         } elseif ($message->getMessage()->getText() == '/start@CoffeeBreak_bot') {
             
             $keyboard = [];
@@ -113,7 +113,7 @@ class WebhookController extends App
         ) {
             
             $name = $message->getMessage()->getFrom()->getFirstName() . ' ' . $message->getMessage()->getFrom()->getLastName();
-            $find = CoffeeUsers::find(['name' => $name]);
+            $find = CoffeeUsers::find(['name' => $name, 'chatId' => $chatId]);
             if ($find->count > 0) {
                 CoffeeUsers::where(['id' => $find->rows[0]->id])->update(['type' => $message->getMessage()->getText()]);
                 //                print_r($telegram->sendMessage([
@@ -121,7 +121,7 @@ class WebhookController extends App
                 //                    'text' => "Update"
                 //                ]));
             } else {
-                CoffeeUsers::add(['name' => $name, 'type' => $message->getMessage()->getText()]);
+                CoffeeUsers::add(['name' => $name, 'chatId' => $chatId, 'type' => $message->getMessage()->getText()]);
                 //                print_r($telegram->sendMessage([
                 //                    'chat_id' => $chatId,
                 //                    'text' => "Add"
