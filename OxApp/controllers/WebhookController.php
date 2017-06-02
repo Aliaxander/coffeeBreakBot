@@ -74,7 +74,7 @@ class WebhookController extends App
             'chat_id' => $chatId,
             'text' => 'Set coffee:',
             'reply_markup' => $reply_markup,
-           // 'reply_to_message_id' => $chatId
+            'reply_to_message_id' =>  $message->getMessage()->get("message_id")
         ]);
         
         //
