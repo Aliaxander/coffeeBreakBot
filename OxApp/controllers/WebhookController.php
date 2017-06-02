@@ -40,6 +40,12 @@ class WebhookController extends App
         
         $message = $telegram->getWebhookUpdate();
         $chatId = $message->getMessage()->getChat()->getId();
+        print_r($telegram->sendMessage([
+            'chat_id' => $chatId,
+            'text' => json_encode($message->getMessage())
+        ]));
+        
+        
        // $message = $telegram->getUpdates();
         if($message->getMessage()->getReplyToMessage()->getFrom()->getUsername()=='CoffeeBreak_bot'){
                      print_r($telegram->sendMessage([
@@ -47,10 +53,6 @@ class WebhookController extends App
                          'text' => "Ok"
                      ]));
         }else {
-            print_r($telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => json_encode($message->getMessage())
-            ]));
             $keyboard = [];
             $i = 0;
             $i2 = 0;
