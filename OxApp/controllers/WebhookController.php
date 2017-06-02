@@ -63,9 +63,15 @@ class WebhookController extends App
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
                     'text' => $people[mt_rand(0, count($people) - 1)] . " покупает:\n" . $result,
-                    'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
+                    'reply_markup' => $telegram->replyKeyboardHide(),
                 ]));
             }
+//            $response = $telegram->sendMessage([
+//                'chat_id' => $chatId. '@',
+//                'text' => 'Ok.',
+//                'reply_markup' => $telegram->replyKeyboardHide(),
+//                'reply_to_message_id' => $chatId
+//            ]);
             CoffeeUsers::delete([]);
         } elseif ($message->getMessage()->getText() == '/start@CoffeeBreak_bot') {
             
