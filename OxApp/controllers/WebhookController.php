@@ -36,7 +36,7 @@ class WebhookController extends App
         $token = Bots::find(['id' => $botId])->rows[0]->api;
         $telegram = new Api($token);
         //print_r($telegram->setWebhook(['url'=>'https://coffe.ebot.biz/webhook']));
-        // $telegram->removeWebhook();
+        $telegram->removeWebhook();
         
         $message = $telegram->getWebhookUpdate();
         
