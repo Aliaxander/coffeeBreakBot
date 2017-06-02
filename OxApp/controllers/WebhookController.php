@@ -57,14 +57,14 @@ class WebhookController extends App
                 $people = [];
                 foreach ($find->rows as $row) {
                     if ($row->type != 'No, thanks') {
-                        $result .= " <b>" . $row->name . "</b> - " . $row->type . "\n";
+                        $result .= " <b>" . $row->name . "</b> - <i>" . $row->type . "</i>\n";
                         $people[] = $row->name;
                     }
                 }
                 
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
-                    'text' => $people[mt_rand(0, count($people) - 1)] . " покупает:\n" . $result,
+                    'text' => "<b>" . $people[mt_rand(0, count($people) - 1)] . "</b> покупает:\n" . $result,
                     'parse_mode' => 'HTML',
                     'reply_markup' => $telegram->replyKeyboardHide(),
                 ]));
