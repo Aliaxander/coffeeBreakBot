@@ -56,9 +56,18 @@ class WebhookController extends App
             $find = CoffeeUsers::find(['name' => $name]);
             if ($find->count > 0) {
                 CoffeeUsers::where(['id' => $find->rows[0]->id])->update(['type' => $message->getMessage()->getText()]);
+                print_r($telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'text' => "Update"
+                ]));
             } else {
                 CoffeeUsers::add(['name' => $name, 'type' => $message->getMessage()->getText()]);
+                print_r($telegram->sendMessage([
+                    'chat_id' => $chatId,
+                    'text' => "Add"
+                ]));
             }
+ 
         } else {
             $keyboard = [];
             $i = 0;
