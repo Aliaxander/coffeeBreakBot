@@ -36,19 +36,11 @@ class WebhookController extends App
         $token = Bots::find(['id' => $botId])->rows[0]->api;
         $telegram = new Api($token);
         //print_r($telegram->setWebhook(['url'=>'https://coffe.ebot.biz/webhook']));
-        $telegram->removeWebhook();
+       //$telegram->removeWebhook();
         
         $message = $telegram->getWebhookUpdate();
-        
-        print_r($message);
-        
-        $messageTxt = $message->getMessage();
+       // $message = $telegram->getUpdates();
         $chatId = $message->getMessage()->getFrom()->getId();
-                 print_r($telegram->sendMessage([
-                     'chat_id' => $chatId,
-                     'text' => json_encode($message->getMessage()->getChat())
-                 ]));
-        $chatId = $message->getMessage()->getChat()->getId();
         
         $keyboard=[];
         $i=0;
@@ -79,7 +71,7 @@ class WebhookController extends App
             'chat_id' => $chatId . '@',
             'text' => 'Set coffee:',
             'reply_markup' => $reply_markup,
-         //  'reply_to_message_id' => $chatId
+            'reply_to_message_id' => $chatId
         ]);
         
         //
