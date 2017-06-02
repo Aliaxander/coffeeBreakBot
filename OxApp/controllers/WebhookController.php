@@ -51,10 +51,6 @@ class WebhookController extends App
         // $message = $telegram->getUpdates();
         
         if ($message->getMessage()->getText() == '/result@CoffeeBreak_bot') {
-            print_r($telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => "Ok"
-            ]));
             $find = CoffeeUsers::find();
             if ($find->count > 0) {
                 $result = '';
@@ -66,32 +62,34 @@ class WebhookController extends App
                 
                 print_r($telegram->sendMessage([
                     'chat_id' => $chatId,
-                    'text' => $people[mt_rand(0, count($people) - 1)] . " buy coffee:\n" . $result
+                    'text' => $people[mt_rand(0, count($people) - 1)] . " buy coffee:\n" . $result,
+                    'reply_markup' => $telegram->replyKeyboardHide(['selective' => true]),
                 ]));
             }
+            
         } elseif ($message->getMessage()->getReplyToMessage()->getFrom()->getUsername() == 'CoffeeBreak_bot' &&
             $message->getMessage()->getText() != '/start@CoffeeBreak_bot'
         ) {
-            
-            print_r($telegram->sendMessage([
-                'chat_id' => $chatId,
-                'text' => "Ok"
-            ]));
+        
+//            print_r($telegram->sendMessage([
+//                'chat_id' => $chatId,
+//                'text' => "Ok"
+//            ]));
             
             $name = $message->getMessage()->getFrom()->getFirstName() . ' ' . $message->getMessage()->getFrom()->getLastName();
             $find = CoffeeUsers::find(['name' => $name]);
             if ($find->count > 0) {
                 CoffeeUsers::where(['id' => $find->rows[0]->id])->update(['type' => $message->getMessage()->getText()]);
-                print_r($telegram->sendMessage([
-                    'chat_id' => $chatId,
-                    'text' => "Update"
-                ]));
+//                print_r($telegram->sendMessage([
+//                    'chat_id' => $chatId,
+//                    'text' => "Update"
+//                ]));
             } else {
                 CoffeeUsers::add(['name' => $name, 'type' => $message->getMessage()->getText()]);
-                print_r($telegram->sendMessage([
-                    'chat_id' => $chatId,
-                    'text' => "Add"
-                ]));
+//                print_r($telegram->sendMessage([
+//                    'chat_id' => $chatId,
+//                    'text' => "Add"
+//                ]));
             }
             
         } else {
